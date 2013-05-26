@@ -1,25 +1,75 @@
 .clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
-}
- 
-* html .clearfix {
-	height: 1%;
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
 }
 
-.wrapper { 
-     width: 960px;
-	 margin: 0 auto;
+.clearfix {
+    display: inline-block;
+}
+
+.wrapper {
+    background-image: linear-gradient(bottom, rgb(138,134,138) 40%, rgb(125,119,119) 70%, rgb(112,112,112) 85%);
+    background-image: -o-linear-gradient(bottom, rgb(138,134,138) 40%, rgb(125,119,119) 70%, rgb(112,112,112) 85%); 
+    background-image: -moz-linear-gradient(bottom, rgb(138,134,138) 40%, rgb(125,119,119) 70%, rgb(112,112,112) 85%);
+    background-image: -webkit-linear-gradient(bottom, rgb(138,134,138) 40%, rgb(125,119,119) 70%, rgb(112,112,112) 85%);
+    background-image: -ms-linear-gradient(bottom, rgb(138,134,138) 40%, rgb(125,119,119) 70%, rgb(112,112,112) 85%);
+    background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.4, rgb(138,134,138)),color-stop(0.7, rgb(125,119,119)),color-stop(0.85, rgb(112,112,112)));
+    width: 740px;
+    margin: 0 auto;
+    border-radius: 20px;
+	padding:30px;
+}
+
+.page-title {
+    font-size: 35px;
+	color:#181818 ;
+    height: 50px;
+    text-align: center;
+	padding:10px 0px;
+}
+
+nav {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+
+.horizontal-menu {
+    padding: 0;
+    margin: 0 auto;
+    display: block;
+    width: 600px;
+}
+
+.horizontal-menu li {
+    margin: 0px 3px;
+    text-align: center;
+    float: left;
+    display: block;
+    width: 24%;
+    height: 20px;
+    border-radius: 8px;
+    background-color: #B8B8B8;
+}
+li.selected-item
+{
+    background-color: #E8E8E8;
+}
+
+.horizontal-menu li:hover {
+    background-color: #E8E8E8;
+}
+
+.horizontal-menu li a {
+    color: black;
+    text-decoration: none;
+}
+.central-content
+{
+  border-radius: 10px;
+  background-color:#E8E8E8 ;
+  padding:10px;
+  margin-top:20px;
 }

@@ -4,6 +4,7 @@
         <title>
             Some PHP page
         </title>
+		<meta http-equiv = "content-type" content = "text/html; charset = UTF-8" />
         <script type="text/javascript" src="js/jquery-2.0.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
         <script type="text/javascript" src="js/backbone-min.js"></script>
@@ -11,15 +12,18 @@
     </head>
     <body>
         <div class="wrapper">
-            <nav>
-             <ul>
-                 <li>nav1</li>
-                 <li>nav2</li>
-                 <li>nav3</li>
-                 <li>nav4</li>
-             </ul>
+            <header class="page-title">
+                Bug Tracking System
+            </header>
+            <nav >
+                <ul class="clearfix horizontal-menu">
+                    <li class="selected-item"><a href="#">Начало</a></li>
+                    <li><a href="#">Тестери</a></li>
+                    <li><a href="#">Грешки</a></li>
+                    <li><a href="#">Проекти</a></li>
+                </ul>
             </nav>
-            <section>
+            <section class="central-content">
                 <header>
                     <h1>some text</h1>
                 </header>
