@@ -53,12 +53,12 @@ nav {
     border-radius: 8px;
     background-color: #B8B8B8;
 }
-li.selected-item
+.selected-item
 {
-    background-color: #E8E8E8;
+   background-color: #E8E8E8 !important ;
 }
 
-.horizontal-menu li:hover {
+.horizontal-menu  li:hover {
     background-color: #E8E8E8;
 }
 
@@ -69,7 +69,45 @@ li.selected-item
 .central-content
 {
   border-radius: 10px;
-  background-color:#E8E8E8 ;
+  background-color:#C8C8C8 ;
   padding:10px;
   margin-top:20px;
+}
+.right-navigation
+{
+   float:left;
+   width:120px;
+   padding:5px;
+}
+.right-navigation ul
+{
+  list-style-type: none;
+  padding:0;
+  margin:10px;
+}
+.right-navigation ul li
+{
+    margin: 10px 0px;
+    text-align: center;
+    display: block;
+    width:100px;
+    height: 20px;
+    border-radius: 8px;
+    background-color: #989898 ;
+}
+.right-navigation ul li:hover
+{
+   background-color: #E8E8E8;
+}
+.right-navigation ul li a
+{
+   color: black;
+   text-decoration: none;
+}
+.article-content
+{
+ background-color:red;
+ float:left;
+ width:590px;
+ height:400px;
 }
