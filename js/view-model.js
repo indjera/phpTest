@@ -1,7 +1,8 @@
 function  ViewModel (exObject) {
 	 var self = this;
 	 self.monuList;
-	// self.horisontalMenu = new Array(1, 2, 3, 5, 6);
+	 self.competitors = ko.observableArray([]);
+	 self.horisontalMenu = new Array(1, 2, 3, 5, 6);
 	 self.verticalMenu;
 	 self.create = function () {
 	     if (exObject)
@@ -11,7 +12,7 @@ function  ViewModel (exObject) {
 	 }
 	 self.isLoaded = ko.observable(false);
 
-	 self.loadHorisontalMenu = function (callBackFunk) {
+	 self.load = function (callBackFunk) {
 	     self.isLoaded(true);
 	     $.ajax({
 	         url: "http://localhost:3333/getMenu.php",
@@ -22,12 +23,9 @@ function  ViewModel (exObject) {
 	             {
 	                 callBackFunk(jsonData);
 	                 self.isLoaded(false);
-	                
 	             }
-	             ko.mapping.fromJS(jsonData, {}, self);
-	             ko.applyBindings(self);
-	             self.horisontalMenu.push("ilko");
-                 
+	             self.competitors(jsonData);
+	             
 	         }
 	     });
 	 }
