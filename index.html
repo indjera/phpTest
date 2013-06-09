@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>
@@ -7,7 +7,9 @@
 		<meta http-equiv = "content-type" content = "text/html; charset = UTF-8" />
         <script type="text/javascript" src="js/jquery-2.0.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
-        <script type="text/javascript" src="js/backbone-min.js"></script>
+        <script type="text/javascript" src="js/view-model.js"></script>
+        <script type="text/javascript" src="js/knockout-2.2.1.js"></script>
+        <script type="text/javascript" src="js/knockout.mapping.js"></script>
         <link rel="stylesheet" type="text/css" href="css/general.css"/>
     </head>
     <body>
@@ -16,11 +18,9 @@
                 Bug Tracking System
             </header>
             <nav >
-                <ul class="clearfix horizontal-menu">
-                    <li class="selected-item"><a href="#">Начало</a></li>
-                    <li><a href="#">Тестери</a></li>
-                    <li><a href="#">Грешки</a></li>
-                    <li><a href="#">Проекти</a></li>
+                <ul class="clearfix horizontal-menu" data-bind="foreach: horisontalMenu">
+                    <!--<li class="selected-item"><a href="#">Начало</a></li>-->
+                    <li><a href="#" data-bind="text: $data"></a></li>
                 </ul>
             </nav>
             <section class="clearfix central-content">
@@ -36,8 +36,16 @@
 				</nav>
                 <article class="article-content">
                     some text
+					<input id="btn1" type="button"/>
                 </article>
             </section>
         </div>
+		<script>
+		    var viewModel = new ViewModel();
+		   // var viewModel = ko.mapping.fromJS({ horisontalMenu: ["json1", "json2", "json1", "json4"] }, {}, viewModel);
+		    viewModel.loadHorisontalMenu();
+		  //  ko.applyBindings(viewModel);
+		 //   viewModel.horisontalMenu.push("dadada");
+		</script>
     </body>
 </html>
