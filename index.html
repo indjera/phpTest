@@ -7,9 +7,10 @@
 		<meta http-equiv = "content-type" content = "text/html; charset = UTF-8" />
         <script type="text/javascript" src="js/jquery-2.0.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
-        <script type="text/javascript" src="js/view-model.js"></script>
+        <script type="text/javascript" src="js/VModel.js"></script>
         <script type="text/javascript" src="js/knockout-2.2.1.js"></script>
         <script type="text/javascript" src="js/knockout.mapping.js"></script>
+        <script type="text/javascript" src="js/menu.js"></script>
         <link rel="stylesheet" type="text/css" href="css/general.css"/>
     </head>
     <body>
@@ -18,8 +19,7 @@
                 Bug Tracking System
             </header>
             <nav >
-                <ul class="clearfix horizontal-menu" data-bind="foreach: horisontalMenu">
-                    <!--<li class="selected-item"><a href="#">Начало</a></li>-->
+                <ul id="vivev" class="clearfix horizontal-menu" data-bind="foreach: getHorisontalItem">
                     <li><a href="#" data-bind="text: $data"></a></li>
                 </ul>
             </nav>
@@ -35,23 +35,47 @@
 				  </ul>
 				</nav>
                 <article class="article-content">
-                    <table data-bind="foreach:competitors">
-                        <tr>
-                            <td width="100" data-bind="text:$data.name"></td>
-                            <td width="100" data-bind="text: $data.id"></td>
-                            <td data-bind="text: $data.sex"></td>
-                        </tr>
+                    <!--<table>
+                        <tbody data-bind="foreach: competitors">
+                            <tr>
+                                <td width="100" data-bind="text: $data.name"></td>
+                                <td width="100" data-bind="text: $data.id"></td>
+                                <td data-bind="text: $data.sex"></td>
+                                <td><a href="#" data-bind="click: $root.removeEl">Remove</a></td>
+                            </tr>
+                            <tr data-bind="foreach:{ data:$root.horisontalMenu, as: 'item' } ">
+                                <td data-bind="text:item,click:$root.removeEl"></td>
+                            </tr>
+                        </tbody>
+                    </table>-->
+                    <table>
+                        <tbody data-bind="foreach:$root.discipline">
+                            <tr data-bind="text:$data"></tr>
+                        </tbody>
                     </table>
+                    <input type="button" value="submit"  data-bind=" event: { click: function (data, ev) { getAlert(data, ev); alert(12);}}" />
                 </article>
             </section>
         </div>
 		<script>
-		    var viewModel = new ViewModel();
-		   // var viewModel = ko.mapping.fromJS({ horisontalMenu: ["json1", "json2", "json1", "json4"] }, {}, viewModel);
-		    viewModel.load();
-		    ko.applyBindings(viewModel);
-		  //  ko.applyBindings(viewModel);
-		 //   viewModel.horisontalMenu.push("dadada");
+		    $(document).ready(function () {
+		        var vModel = new VModel(function (vm) {
+
+		            vm.getHorisontalItem = ko.computed(function () {
+		                var arr = $.map(menuList, function (v, k) { return k; });
+		                return arr;
+		            });
+
+		            vm.getVerticalItems = function (key) {
+		                if (key) {
+		                    return menuList[key];
+		                }
+		            }
+
+
+		            vm.bind();
+		        });
+		    });
 		</script>
     </body>
 </html>
