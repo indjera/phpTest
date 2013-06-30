@@ -1,6 +1,6 @@
-var menuList = {
-                  Live: ["Rally", "Rally-Cross", "Pluvane"],
-			      Results:["Rally", "Rally-Cross","Pluvane"],
-				  'About us':[],
-				  'Contacts':[]
+﻿var menuList = {
+    Live: ["Rally", "Pluvane"],
+    Sports: ["Rally", "Rally-Cross", "Pluvane" ,],
+    'About us': ["Илия","Ангел"],
+    'Contacts': ["see Aboo"]
 }

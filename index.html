@@ -20,18 +20,15 @@
             </header>
             <nav >
                 <ul id="vivev" class="clearfix horizontal-menu" data-bind="foreach: getHorisontalItem">
-                    <li><a href="#" data-bind="text: $data"></a></li>
+                    <li data-bind="click: $root.getVerticalItems,text: $data"></li>
                 </ul>
             </nav>
             <section class="clearfix central-content">
                 <header>
                 </header>
-				<nav class="right-navigation">
-				  <ul>
-				  <li class="selected-item"><a href="#">Начало</a></li>
-                  <li><a href="#">Грешки</a></li>
-				  <li><a href="#">Тестери</a></li>
-                  <li><a href="#">Грешки</a></li>
+				<nav class=" left-navigation">
+				  <ul data-bind="foreach: verticalMenu">
+				     <li ><a href="#" data-bind=" text: $data.name ,attr:{id: 'ver' +  $data.id }"></a></li>
 				  </ul>
 				</nav>
                 <article class="article-content">
@@ -60,18 +57,28 @@
 		<script>
 		    $(document).ready(function () {
 		        var vModel = new VModel(function (vm) {
+		            vm.verticalMenu = ko.observableArray([]);
 
 		            vm.getHorisontalItem = ko.computed(function () {
 		                var arr = $.map(menuList, function (v, k) { return k; });
 		                return arr;
 		            });
 
-		            vm.getVerticalItems = function (key) {
-		                if (key) {
-		                    return menuList[key];
-		                }
+		            vm.getDiscipline = function () {
+		                vm.invokeWebService("disciplineBL.php?func=GetAll", {}, function (result) {
+		                    vm.verticalMenu(result);
+		                });
 		            }
 
+		            vm.getDiscipline();
+
+		            vm.getVerticalItems = function (data, ev) {
+		                $(".horizontal-menu li").removeClass();
+		                $(ev.target).addClass("selected-item");
+		                if (data) {
+		                    vm.verticalMenu(menuList[data]);
+		                }
+		            }
 
 		            vm.bind();
 		        });
