@@ -20,9 +20,12 @@ class DisciplineBL
     }
 }
 
+$func = $_GET['func'];
+$param = $_GET['param'];
 $diciplineBL  =  new DisciplineBL();
-if(method_exists($diciplineBL,$_GET['func'])){
-	echo  $diciplineBL->$_GET['func']();
+
+if(method_exists($diciplineBL,$func)){
+	echo  $diciplineBL->$func($param);
 }
 
 ?>

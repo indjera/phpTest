@@ -33,4 +33,6 @@ class CompetitorsOperation
 }
 $competitorsOperation = new CompetitorsOperation();
 echo $competitorsOperation->GetAll();
+
+
 ?>

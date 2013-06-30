@@ -119,3 +119,31 @@ nav {
  border-radius: 12px;
  padding:10px;
 }
+.races{
+   border-spacing:0px;
+   border:0px;
+   
+}
+
+.races td:nth-child(1){width :180px;}
+.races tbody tr:hover 
+{
+   background-color:blue;
+}
+.races tbody td
+{
+    height:25px;
+	width:160px;
+	max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.races th {
+    background-color:#F80000 ;
+	height:30px;
+}
+.races  th { text-align:left;}
+
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}

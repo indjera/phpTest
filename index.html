@@ -28,36 +28,65 @@
                 </header>
 				<nav class=" left-navigation">
 				  <ul data-bind="foreach: verticalMenu">
-				     <li ><a href="#" data-bind=" text: $data.name ,attr:{id: 'ver' +  $data.id }"></a></li>
+				     <li ><a href="#" data-bind=" text: $data"></a></li>
 				  </ul>
 				</nav>
                 <article class="article-content">
-                    <!--<table>
-                        <tbody data-bind="foreach: competitors">
-                            <tr>
-                                <td width="100" data-bind="text: $data.name"></td>
-                                <td width="100" data-bind="text: $data.id"></td>
-                                <td data-bind="text: $data.sex"></td>
-                                <td><a href="#" data-bind="click: $root.removeEl">Remove</a></td>
-                            </tr>
-                            <tr data-bind="foreach:{ data:$root.horisontalMenu, as: 'item' } ">
-                                <td data-bind="text:item,click:$root.removeEl"></td>
-                            </tr>
+                    <table class="races">
+                        <thead>
+                        <tr>
+                          <th>Събитие</th>
+                          <th>Дата</th>
+                          <th>Място на провеждане</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="foreach:$root.races">
+                          <tr data-bind="click: $root.goToResults ">
+                              <td data-bind="text:$data.name"></td>
+                              <td data-bind="text:$data.date"></td>
+                              <td data-bind="text: $data.location"></td>
+                          </tr>
                         </tbody>
-                    </table>-->
+                    </table>
                     <table>
-                        <tbody data-bind="foreach:$root.discipline">
+                        <tbody data-bind="foreach:$root.results">
                             <tr data-bind="text:$data"></tr>
                         </tbody>
                     </table>
-                    <input type="button" value="submit"  data-bind=" event: { click: function (data, ev) { getAlert(data, ev); alert(12);}}" />
+                    <input type="button" value="submit"  data-bind=" event: {click: function (data, ev) { getAlert(data, ev); alert(12);}}" />
                 </article>
             </section>
         </div>
 		<script>
 		    $(document).ready(function () {
 		        var vModel = new VModel(function (vm) {
+
 		            vm.verticalMenu = ko.observableArray([]);
+		            vm.results = ko.observableArray([]);
+		            vm.races = ko.observableArray([]);
+		            vm.isVisibleRaces = ko.observable(true);
+		            vm.isVisibleResults = ko.observable(false);
+
+		            vm.getResults = function () {
+		                vm.invokeWebService("resultsBL.php", { func: "GetAll"}, function (result) {
+		                    vm.results(result);
+		                });
+		            }
+
+		            vm.goToResults = function (data, ev) {
+		                vm.getResults();
+		                vm.isVisibleRaces(false);
+		                vm.isVisibleResults(true);
+
+		            }
+
+		            vm.getRaces = function () {
+		                vm.invokeWebService("racesBL.php", {func: "GetAll"}, function (result) {
+		                    vm.races(result);
+		                });
+		            }
+		            vm.getRaces();
+		            
 
 		            vm.getHorisontalItem = ko.computed(function () {
 		                var arr = $.map(menuList, function (v, k) { return k; });
@@ -65,12 +94,10 @@
 		            });
 
 		            vm.getDiscipline = function () {
-		                vm.invokeWebService("disciplineBL.php?func=GetAll", {}, function (result) {
+		                vm.invokeWebService("disciplineBL.php", {func:"GetAll",param:"1"}, function (result) {
 		                    vm.verticalMenu(result);
 		                });
 		            }
-
-		            vm.getDiscipline();
 
 		            vm.getVerticalItems = function (data, ev) {
 		                $(".horizontal-menu li").removeClass();
@@ -79,6 +106,10 @@
 		                    vm.verticalMenu(menuList[data]);
 		                }
 		            }
+
+		            vm.invokeWebService("disciplineBL.php", { func: "GetDisciplineByCategory", param: "A" }, function (result) {
+		                vm.verticalMenu(result);
+		            });
 
 		            vm.bind();
 		        });
