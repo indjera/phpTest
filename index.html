@@ -2,115 +2,510 @@
 <html>
     <head>
         <title>
-            Some PHP page
+            Live Results
         </title>
 		<meta http-equiv = "content-type" content = "text/html; charset = UTF-8" />
         <script type="text/javascript" src="js/jquery-2.0.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
         <script type="text/javascript" src="js/VModel.js"></script>
         <script type="text/javascript" src="js/knockout-2.2.1.js"></script>
         <script type="text/javascript" src="js/knockout.mapping.js"></script>
         <script type="text/javascript" src="js/menu.js"></script>
         <link rel="stylesheet" type="text/css" href="css/general.css"/>
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
     </head>
     <body>
-        <div class="wrapper">
+        <div class="wrapper clearfix">
             <header class="page-title">
-                Bug Tracking System
+               Резултати в реално време
             </header>
-            <nav >
+            <nav class="clearfix" >
                 <ul id="vivev" class="clearfix horizontal-menu" data-bind="foreach: getHorisontalItem">
-                    <li data-bind="click: $root.getVerticalItems,text: $data"></li>
+                    <li data-bind="click: $root.getSecondMenulItems, text: $data"></li>
                 </ul>
             </nav>
-            <section class="clearfix central-content">
+            <section class="central-content clearfix">
                 <header>
                 </header>
-				<nav class=" left-navigation">
-				  <ul data-bind="foreach: verticalMenu">
-				     <li ><a href="#" data-bind=" text: $data"></a></li>
-				  </ul>
+				<nav class="left-navigation" data-bind="visible: true">
+                    <ul class="clearfix" data-bind="visible: menu['Състезания']()">
+                        <li data-bind="click: showNewRace,visible:isVisibleRaces()">Добави</li>
+                        <li data-bind="click: goBack,visible:isVisibleResults()">Назад</li>
+                        <li data-bind="click: showNewCompetitor,visible:isVisibleResults()">Добави състезател</li>
+                        <li data-bind="click: showFilterRace,visible:isVisibleRaces()">Филтрирай</li>
+                        <li data-bind="click: showFilterCompetitors,visible:isVisibleResults()">Филтрирай</li>
+                    </ul>
+                    <ul class="clearfix" data-bind="visible: menu['Дисциплини']()">
+                        <li data-bind="click: showNewDiscipline">Добави</li>
+                        <li data-bind="click: showNewCategory">Добави категория</li>
+                        <li data-bind="click: showFilterDiscipline">Филтрирай</li>
+                    </ul>
+                    <ul class="clearfix" data-bind="visible: menu['Отбори']()">
+                       <li data-bind="click: showNewTeam">Добави</li>
+                    </ul>
+                    <ul class="clearfix" data-bind="visible: menu['Контакти']()">
+                        <li data-bind="">Нещо</li>
+                    </ul>
 				</nav>
-                <article class="article-content">
-                    <table class="races">
-                        <thead>
-                        <tr>
-                          <th>Събитие</th>
-                          <th>Дата</th>
-                          <th>Място на провеждане</th>
-                        </tr>
-                        </thead>
-                        <tbody data-bind="foreach:$root.races">
-                          <tr data-bind="click: $root.goToResults ">
-                              <td data-bind="text:$data.name"></td>
-                              <td data-bind="text:$data.date"></td>
-                              <td data-bind="text: $data.location"></td>
-                          </tr>
-                        </tbody>
-                    </table>
-                    <table>
-                        <tbody data-bind="foreach:$root.results">
-                            <tr data-bind="text:$data"></tr>
-                        </tbody>
-                    </table>
-                    <input type="button" value="submit"  data-bind=" event: {click: function (data, ev) { getAlert(data, ev); alert(12);}}" />
+                <article class="article-content clearfix">
+                    <div data-bind="visible: menu['Състезания']()">
+                        <table class="races" data-bind="visible: isVisibleRaces()">
+                            <thead>
+                                <tr>
+                                    <th>Състезание</th>
+                                    <th>Дата на провеждане</th>
+                                    <th>Място на провеждане</th>
+                                    <th>Резултати</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: $root.races">
+                                <tr data-bind="">
+                                    <td data-bind="text: $data.name"></td>
+                                    <td data-bind="text: $data.date"></td>
+                                    <td data-bind="text: $data.location"></td>
+                                    <td data-bind="click:$root.goToResults">Натисни</td>
+                                    <td data-bind="click:$root.showEditRace">Редактирай</td>
+                                    <td data-bind="click:$root.deleteRace">Изтрии</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="races" data-bind="visible: isVisibleResults()">
+                            <thead>
+                                <tr>
+                                    <th>Състезател</th>
+                                    <th>Години</th>
+                                    <th>Точки</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: $root.results">
+                                <tr data-bind="">
+                                    <td data-bind="text: $data.name"></td>
+                                    <td data-bind="text: $data.age"></td>
+                                    <td data-bind="text: $data.score"></td>
+                                    <td data-bind="click:$root.deleteCompetitors">Изтрии</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="disciplines" data-bind="visible: menu['Дисциплини']">
+                       <div data-bind="foreach:disciplines">
+                           <h4 data-bind="text:$data.name"></h4>
+                           <span><strong>Категория:</strong><strong data-bind="text:$data.category"></strong></span>
+                           <p data-bind="text:$data.description"></p>
+                            <a href="" data-bind="click:$root.deleteDiscipline">Изтрии</a>
+                       </div>
+                    </div>
                 </article>
             </section>
+        </div>
+        <div class="hideDiv">
+            <div id="newRace" class="newForm clearfix" data-bind="visible: false">
+                <div>
+                    <label>Име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: race.name, css: { required: race.name() ? false : true }" />
+                    <label>Място на провеждане</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: race.location, css: { required: race.location() ? false : true }" />
+                    <label>Дисциплина</label>
+                    <select data-bind="options: disciplines, optionsText:'name',optionsValue:'id', optionsCaption: 'избери',value:race.discipline">
+                    </select>
+                    <label>Дата</label>
+                    <input type="text" maxlength="50" class="datepicker-input" required="required" data-bind="event: { change: function (data, ev) { race.date($(ev.target).datepicker().val()); } }, css: { required: race.date() ? false : true },value:race.date" />
+                    <label>Цена за участие</label>
+                    <input type="text" maxlength="12" required="required" pattern="([0-9]+|[0-9]+(\.|\,)?[0-9]+)" data-bind="value: race.price, css: { required: race.price() ? false : true }" />
+                    <input class="check-box" type="checkbox" value="male" data-bind="event: { change: $root.selectSex }" />Мъже<br />
+                    <input class="check-box" type="checkbox" value="fmale" data-bind="event: { change: $root.selectSex }" />Жени<br />
+                    <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveRace" />
+                </div>
+            </div>
+            <div id="newDiscipline" class="newForm" data-bind="visible: true">
+                <div>
+                    <label>Име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: discipline.name, css: { required: discipline.name() ? false : true }" />
+                    <label>Категории</label>
+                    <select data-bind="options: categories, optionsText: 'name', optionsValue: 'id', value: discipline.category, optionsCaption: 'избери'">
+                    </select>
+                    <label>Описание</label>
+                    <textarea data-bind="value:discipline.description"></textarea>
+                    <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveDiscipline" />
+                </div>
+            </div>
+            <div id="newCategory" class="newForm" data-bind="visible: true">
+                <div>
+                    <label>Име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: category.name, css: { required: category.name() ? false : true }" />
+                    <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveCategory" />
+                </div>
+            </div>
+            <div id="newTeam" class="newForm" data-bind="visible: false">
+                <div>
+                    <label>Име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: discipline.name, css: { required: discipline.name() ? false : true }" />
+                    <label>Категории</label>
+                    <select data-bind="options: categories,optionsText:'name',optionsValue:'id', value:team.competitors ">
+                    </select>
+                    <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveDiscipline" />
+                </div>
+            </div>
+            <div id="newUser" class="newForm" data-bind="visible: true">
+                <div>
+                    <label>Потребителско име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: user.username, css: { required: user.username() ? false : true }" />
+                    <label>Електронна поща</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: user.email, css: { required: user.email() ? false : true }" />
+                    <label>Парола</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: user.password, css: { required: user.password() ? false : true }" />
+                </div>
+                <div>
+                    <label>Възраст</label>
+                    <input type="number" maxlength="50" required="required" min="12" data-bind="value: user.age, css: { required: user.age() ? false : true }" />
+                    <input class="check-box" type="checkbox" value="male" data-bind="event: { change: selectSexNewUser }" />Мъж<br />
+                    <input class="check-box" type="checkbox" value="fmale" data-bind="event: { change: selectSexNewUser }" />Женa
+                </div>
+                <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveUser" />
+            </div>
+            <div id="newCompetitor" class="newForm">
+                 <div>
+                    <label>име:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: competitor.name, css: { required: competitor.name() ? false : true }" />
+                    <label>Възраст</label>
+                    <input type="number" maxlength="50" required="required" min="12" data-bind="value: competitor.age, css: { required: competitor.age() ? false : true }" />
+                    <label>Точки</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: competitor.score, css: { required: competitor.score() ? false : true }" />
+                    <label>Отбор</label>
+                     <select data-bind="options: teams,optionsText:'name',optionsValue:'id', value:competitor.team_id">
+                    </select>
+                    <input class="bnt" type="button" value="Запиши" data-bind="click: $root.saveCompetitor" />
+                </div>
+            </div>
+            <div id="FilterRace" class="newForm">
+            	<div>
+            		<label>Място:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: filterRace"/>
+                    <input class="bnt" type="button" value="Филтрирай" data-bind="click: filterRaceByPlace" />
+            	</div>
+            </div>
+            <div id="FilterCompetitors" class="newForm">
+            	<div>
+            		<label>Години:</label>
+                    <input type="text" maxlength="50" required="required" data-bind="value: filterCompetitors"/>
+                    <input class="bnt" type="button" value="Филтрирай" data-bind="click:filterCompetitorsByAge" />
+            	</div>
+            </div>
+            <div id="FilterDiscipline" class="newForm">
+            	<div>
+            		<label>Категории:</label>
+                     <select data-bind="options: categories, optionsText: 'name', optionsValue: 'id', value: filterDiscipline, optionsCaption: 'Всички'">
+                    </select>
+                    <input class="bnt" type="button" value="Филтрирай" data-bind="click:filterDisciplineByCategoty" />
+            	</div>
+            </div>
         </div>
 		<script>
 		    $(document).ready(function () {
 		        var vModel = new VModel(function (vm) {
-
-		            vm.verticalMenu = ko.observableArray([]);
+		            vm.category = new vm.Category();
+		            vm.race = new vm.Race();
+		            vm.discipline = new vm.Discipline();
+		            vm.team = new vm.Team();
+		            vm.competitor = new vm.Competitor();
+		            vm.user = new vm.User();
+		            vm.menu = menuList;
+                    vm.teams = ko.observableArray([]);
+		            vm.disciplines = ko.observableArray([]);
+		            vm.categories = ko.observableArray([]);
 		            vm.results = ko.observableArray([]);
 		            vm.races = ko.observableArray([]);
+		            vm.raceID = ko.observable(0);
+		            vm.currenRace = ko.observable();
 		            vm.isVisibleRaces = ko.observable(true);
 		            vm.isVisibleResults = ko.observable(false);
+		            vm.isVisibleSecondNav = ko.observable(false);
+		            vm.filterRace  = ko.observable();
+		            vm.filterCompetitors  = ko.observable();
+		            vm.filterDiscipline = ko.observable();
 
-		            vm.getResults = function () {
-		                vm.invokeWebService("resultsBL.php", { func: "GetAll"}, function (result) {
+
+		            vm.saveRace = function () {
+		                if (vm.validate("#newRace")) {
+		                    vm.save('racesBL.php', {data:vm.race,id:vm.raceID()}, function (result) {
+		                        if (result) {
+		                            alert("Информацията е записана успесхно!");
+                                    vm.dialogClose("#newRace",vm.race);
+                                    vm.getRaceByPlace();
+                                    vm.raceID(0);
+		                        }
+		                    });
+		                } else { alert("Невалиден вход") }
+		            }
+
+		            vm.saveDiscipline = function () {
+		                if (vm.validate("#newDiscipline")) {
+		                    vm.save('disciplineBL.php', vm.discipline, function (result) {
+		                        if (result) {
+		                            alert("Информацията е записана успесхно!");
+		                            vm.dialogClose("#newDiscipline",vm.discipline);
+		                            vm.getDisciplineByCategory();
+		                        }
+		                    });
+		                } else { alert("Невалиден вход") }
+		            }
+
+		            vm.saveUser = function () {
+		                if (vm.validate("#newUser")) {
+		                    vm.save('userBL.php', vm.user, function (result) {
+		                        if (result) {
+		                            alert("Информацията е записана успесхно!");
+		                            $("#newUser").dialog("close");
+		                        }
+		                    });
+		                } else { alert("Невалиден вход") }
+		            }
+
+		            vm.saveCategory = function () {
+		                if (vm.validate("#newCategory")) {
+		                    vm.save('categoryBL.php', vm.category, function (result) {
+		                        if (result) {
+		                            alert("Информацията е записана успесхно!");
+		                            $("#newCategory").dialog("close");
+		                        }
+		                    });
+		                } else { alert("Невалиден вход") }
+		            }
+
+                    vm.saveCompetitor = function () {
+                        if (vm.validate("#newCompetitor")) {
+                        	vm.competitor.discipline_id(vm.currenRace().id);
+                            vm.save('competitorBL.php', vm.competitor, function (result) {
+                                if (result) {
+                                    alert("Информацията е записана успесхно!");
+                                    vm.dialogClose("#newCompetitor",vm.competitor)
+                                    vm.getResults(vm.currenRace().id);
+                                }
+                            });
+                        } else { alert("Невалиден вход") }
+                    }
+
+
+                    vm.deleteRace = function (data,ev) {
+                    	if(confirm("Потвърди изтриване")){
+                            vm.delete('racesBL.php', data, function (result) {
+                                if (result) {
+                                    alert("Информацията е изтрита успесхно!");
+                                    vm.getRaceByPlace();
+                                }
+                            });
+                        }
+                    }
+
+                    vm.deleteCompetitors = function (data,ev) {
+                    	if(confirm("Потвърди изтриване")){
+                        vm.delete('competitorBL.php', data, function (result) {
+                            if (result) {
+                                alert("Информацията е изтрита успесхно!");
+                                vm.getResults(vm.currenRace().id);
+                            }
+                        });
+                    }
+                    }
+
+                    vm.deleteDiscipline=function(data,ev){
+                    	if(confirm("Потвърди изтриване")){
+                            vm.delete('disciplineBL.php', data, function (result) {
+                                if (result) {
+                                    alert("Информацията е изтрита успесхно!");
+                                    vm.getDisciplineByCategory();
+                                }
+                            });
+                        }
+                    }
+
+		            vm.selectSexNewUser = function (data, ev) {
+		                $("#newUser .check-box").prop("checked", false);
+		                $(ev.target).prop("checked", true);
+		                vm.user.sex($(ev.target).val());
+		            }
+
+		            vm.selectSex = function (data, ev) {
+		                $("#newRace .check-box").prop("checked", false);
+		                $(ev.target).prop("checked", true);
+		                vm.race.sex($(ev.target).val());
+		            }
+
+		            vm.getResults = function (id) {
+		                vm.invokeWebService("competitorBL.php", { func: "GetByRaceID",param:id}, function (result) {
 		                    vm.results(result);
 		                });
 		            }
 
 		            vm.goToResults = function (data, ev) {
-		                vm.getResults();
+                        console.log(data);
+                        vm.currenRace(data);
+		                vm.getResults(data.id);
 		                vm.isVisibleRaces(false);
 		                vm.isVisibleResults(true);
-
 		            }
+
+                    vm.goBack = function(){
+                         vm.isVisibleRaces(true);
+                         vm.isVisibleResults(false);
+                    }
 
 		            vm.getRaces = function () {
 		                vm.invokeWebService("racesBL.php", {func: "GetAll"}, function (result) {
 		                    vm.races(result);
 		                });
 		            }
-		            vm.getRaces();
-		            
 
+		            vm.getRaceByPlace = function(){
+		            	vm.invokeWebService("racesBL.php", {func: "GetRaceByPlace",param:vm.filterRace()}, function (result) {
+		                    vm.races(result);
+		                });
+		            }
+
+		            vm.filterRaceByPlace =function(){
+		            	vm.getRaceByPlace()
+		            	vm.dialogClose("#FilterRace");
+		            //	vm.filterRace("");
+
+		            }
+
+		            vm.getCompetitorsByAge = function(){
+		            	vm.invokeWebService("competitorBL.php", {func: "GetRaceByAge",param:vm.filterCompetitors()}, function (result) {
+		                    vm.results(result);
+		                });
+		            }
+
+		            vm.filterCompetitorsByAge =function(){
+		            	vm.getCompetitorsByAge()
+		            	vm.dialogClose("#filterCompetitors");
+		            	//vm.filterCompetitors("");
+
+		            }
+
+		            vm.getDisciplineByCategory = function(){
+		            	vm.invokeWebService("disciplineBL.php", {func: "GetDisciplineByCategory",param:vm.filterDiscipline()}, function (result) {
+		                    vm.disciplines(result);
+		                });
+		            }
+
+		            vm.filterDisciplineByCategoty= function(){
+		            	vm.getDisciplineByCategory()
+		            	vm.dialogClose("#FilterDiscipline");
+		            	//vm.filterDiscipline("");
+		            }
+
+
+
+		            vm.getCategories = function () {
+		                vm.invokeWebService("categoryBL.php", { func: "GetAll" }, function (result) {
+		                    vm.categories(result);
+		                });
+		            }
+		           
 		            vm.getHorisontalItem = ko.computed(function () {
 		                var arr = $.map(menuList, function (v, k) { return k; });
 		                return arr;
 		            });
 
 		            vm.getDiscipline = function () {
-		                vm.invokeWebService("disciplineBL.php", {func:"GetAll",param:"1"}, function (result) {
-		                    vm.verticalMenu(result);
+		                vm.invokeWebService("disciplineBL.php", {func:"GetAll"}, function (result) {
+		                    vm.disciplines(result);
 		                });
 		            }
 
-		            vm.getVerticalItems = function (data, ev) {
-		                $(".horizontal-menu li").removeClass();
-		                $(ev.target).addClass("selected-item");
+		            vm.makeSelected = function (selector, item) {
+		                $(selector).removeClass();
+		                $(item).addClass("selected-item");
+		            }
+
+		            vm.getSecondMenulItems = function (data, ev) {
+		                vm.makeSelected(".horizontal-menu li", ev.target)
 		                if (data) {
-		                    vm.verticalMenu(menuList[data]);
+		                    console.log(vm.menu);
+		                    for (var i in vm.menu) {
+		                        vm.menu[i](false);
+		                    }
+		                    vm.menu[data](true);
 		                }
 		            }
 
-		            vm.invokeWebService("disciplineBL.php", { func: "GetDisciplineByCategory", param: "A" }, function (result) {
-		                vm.verticalMenu(result);
-		            });
+		            vm.showNewRace = function(){
+		                $("#newRace").dialog({
+		                    title: "Добави състезание",
+                            width:200,
+		                });
+		            }
+		             vm.showEditRace = function(data){
+		             	vm.set(vm.race,data)
+		             	vm.raceID(data.id);
+		                $("#newRace").dialog({
+		                    title: "Редактирай състезание",
+                            width:200,
+		                });
+		            }
 
+
+		            vm.showNewDiscipline = function(){
+		                $("#newDiscipline").dialog({
+		                    title: "Добави дисциплина",
+		                    width: 200
+		                });
+		            }
+
+		            vm.showNewTeam = function () {
+		                $("#newTeam").dialog({
+		                    title: "Добави отбор",
+		                    width: 200
+		                });
+		            }
+                    vm.showNewCategory =function(){
+                        $("#newCategory").dialog({
+                            title: "Добави категория",
+                            width: 200
+                        });
+                    }
+
+                    vm.showNewCompetitor = function(){
+                         $("#newCompetitor").dialog({
+                            title: "Добави категория",
+                            width: 200
+                        });
+                    }
+
+                    vm.dialogClose = function(idSelector,obj){
+                        $(idSelector).dialog("close");
+                        vm.reset(obj);
+                    }
+
+                    vm.showFilterRace = function(){
+                    	$("#FilterRace").dialog({
+                            title: "Филтрирай",
+                            width: 200
+                        });
+                    }
+
+                    vm.showFilterCompetitors = function(){
+                    	$("#FilterCompetitors").dialog({
+                            title: "Филтрирай",
+                            width: 200
+                        });
+                    }
+
+                    vm.showFilterDiscipline = function(){
+                    	$("#FilterDiscipline").dialog({
+                            title: "Филтрирай",
+                            width: 200
+                        });
+                    }
+
+		            $(".datepicker-input").datepicker({ dateFormat: 'dd/mm/yy' });
+		            vm.getCategories();
+		            vm.getRaces();
+		            vm.getDiscipline();
 		            vm.bind();
 		        });
 		    });

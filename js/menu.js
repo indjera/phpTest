@@ -1,6 +1,6 @@
 ﻿var menuList = {
-    Results: ["Автомобилизъм", "Лека атлетика", "Зимни", "Други"],
-    Sports:[],
-    'About us': ["Илия","Ангел"],
-    'Contacts': ["see Aboo"]
+    "Състезания":ko.observable(false),
+    "Дисциплини": ko.observable(false),
+    "Отбори": ko.observable(false),
+	"Контакти":ko.observable(false),
 }
